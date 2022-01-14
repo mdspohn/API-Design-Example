@@ -1,0 +1,2772 @@
+<!doctype html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>API Documentation Design Example</title>
+  <link rel="stylesheet" type="text/css" href="main.css" />
+  </head>
+<body>
+    <aside id="navigation">
+        <section id="logo">App API Logo</section>
+        <nav>
+        </nav>
+    </aside>
+    <main id="content">
+        <section id="nav-section" class="objects" data-label="Topics">
+            <!-- ====================================
+            // Introduction
+            ================================================= -->
+            <section id="introduction" data-label="Introduction">
+                <div>
+                    <h1>Introduction</h1>
+                    <p>The <strong>&lt;Application Name&gt;</strong> API is organized around
+                    <a target="_blank" href="https://en.wikipedia.org/wiki/Representational_state_transfer">REST</a>.
+                    Our API has predictable, resource-oriented URLs,
+                    and uses HTTP response codes to indicate API errors.
+                    Many endpoints allow you to request different response formats through normal request headers, such as
+                    <a target="_blank" href="https://en.wikipedia.org/wiki/JSON">JSON</a>,
+                    <a target="_blank" href="https://en.wikipedia.org/wiki/XML">XML</a>,
+                    <a target="_blank" href="https://en.wikipedia.org/wiki/PDF">PDF</a>,
+                    or <a target="_blank" href="https://en.wikipedia.org/wiki/Microsoft_Excel">XSLX</a>.
+                    <br />
+                    <br />
+                    This documentation is meant to help users of the API gain a better understand of two main things - the endpoints and how to use them, and the objects returned by such requests.
+                
+                </p>
+                </div>
+                <div>
+                    <h1>API Basics</h1>
+                    <div class="endpoint-url base">
+                        <code><span class="yellow">[your_app_instance]</span>/rs</code>
+                    </div>
+                    <div class="endpoint-success">
+                        <code><span class="green">Status: 200</span></code>
+                    </div>
+                    <div class="endpoint-error">
+                        <code><span class="red">Status: 400 | 500</span></code>
+                    </div>
+                </div>
+            </section>
+        </section>
+        <!-- ====================================
+        // Finance - Summary Endpoints
+        ================================================= -->
+        <section id="endpoints-summary" class="endpoints" data-label="Endpoints - Summary">
+            
+            <section id="endpoints-summary-data" data-label="Data">
+                <div class="endpoint">
+                    <h1>Get Summary Data</h1>
+                    <p>Returns a <a href="#objects-finance-summary-payment">Summary (Payment) Object</a>.</p>
+                    <table class="attribute-table arguments">
+                        <tr>
+                            <td>id
+                                <span>int</span>
+                                <span class="red">required</span>
+                            </td>
+                            <td>The ID of the desired summary object</td>
+                        </tr>
+                    </table>
+                </div>
+                <div>
+                    <div class="endpoint-method">
+                        <code>
+                            <div>GET</div>
+                            <div>
+                                <span class="green">application/
+                                    <div>xml</div>
+                                </span>
+                            </div>
+                        </code>
+                    </div>
+                    <div class="endpoint-url">
+                        <code><span class="yellow">[base_url]</span>/finance/summary/<span class="yellow">[id]</span>/data</code>
+                    </div>
+                    <div class="endpoint-request">
+                        <code data-language="curl">
+                            <div>$ curl "<span class="yellow">[base_url]</span>/finance/summary/<span class="yellow">24</span>/data" \
+                                <div>-H <span class="green">"Accept: application/xml"</span></div>
+                            </div>
+                        </code>
+                    </div>
+                    <div class="endpoint-response">
+                        <code class="xml">
+                            <div>&lt;Summary&gt;
+                                <div>
+                                    &lt;SalesRep id="<span class="light-blue">2</span>"&gt;
+                                    <div class="grey">// SalesRep Elements</div>
+                                    &lt;/SalesRep&gt;
+                                </div>
+                                <div>
+                                    &lt;Payments id="<span class="light-blue">8</span>"&gt;
+                                    <div class="grey">// PaymentSummary Elements</div>
+                                    &lt;/Payments&gt;
+                                </div>
+                                <div>
+                                    &lt;Statement showref="<span class="light-blue">false</span>"&gt;
+                                    <div class="grey">// Statement Elements</div>
+                                    &lt;/Statement&gt;
+                                </div>
+                                <div>
+                                    &lt;Statement showref="<span class="light-blue">false</span>"&gt;
+                                    <div class="grey">// Statement Elements</div>
+                                    &lt;/Statement&gt;
+                                </div>
+                            &lt;/Summary&gt;</div>
+                        </code>
+                    </div>
+                </div>
+            </section>
+
+            <section id="endpoints-summary-statement" data-label="Statement">
+                <div class="endpoint">
+                    <h1>Get Summary Statement</h1>
+                    <p>Returns a templated statement summary in <code>.pdf</code> or <code>.xlsx</code> format, based on your request headers, with the given ID.</p>
+                    <table class="attribute-table arguments">
+                        <tr>
+                            <td>id
+                                <span>int</span>
+                                <span class="red">required</span>
+                            </td>
+                            <td>The ID of the desired summary object</td>
+                        </tr>
+                    </table>
+                </div>
+                <div>
+                    <div class="endpoint-method">
+                        <code>
+                            <div>GET</div>
+                            <div>
+                                <span class="green">application/
+                                    <div>pdf</div>
+                                    <div>vnd.ms-excel</div>
+                                    <div>vnd.openxmlformats-officedocument.spreadsheetml.sheet</div>
+                                </span>
+                            </div>
+                        </code>
+                    </div>
+                    <div class="endpoint-url">
+                        <code><span class="yellow">[base_url]</span>/finance/summary/<span class="yellow">[id]</span>/statement</code>
+                    </div>
+                    <div class="endpoint-request toggle-language">
+                        <code data-language="curl">
+                            <div>$ curl "<span class="yellow">[base_url]</span>/finance/summary/<span class="yellow">24</span>/statement" \
+                                <div>-H <span class="green">"Accept: application/pdf"</span></div>
+                            </div>                            
+                        </code>
+                    </div>
+                    <div class="endpoint-response">
+                        <code class="xml">
+                            <div class="grey">// statement in PDF format</div>
+                        </code>
+                    </div>
+                </div>
+            </section>
+
+        </section>
+
+        <!-- ====================================
+        // Finance - Batch Endpoints
+        ================================================= -->
+        <section id="endpoints-batch" class="endpoints" data-label="Endpoints - Batch">
+
+            <section id="endpoints-batch-query" data-label="Query">
+                <div class="endpoint">
+                    <h1>Query Batches</h1>
+                    <p>Returns a <a href="#objects-finance-batchlist">BatchList Object</a>.</p>
+                    <table class="attribute-table arguments">
+                        <tr>
+                            <td>from<span>string</span></td>
+                            <td>Lower boundary date</td>
+                        </tr>
+                        <tr>
+                            <td>to<span>string</span></td>
+                            <td>Upper boundary date</td>
+                        </tr>
+                        <tr>
+                            <td>complete<span>boolean</span></td>
+                            <td>Filter results to completed or incomplete only</td>
+                        </tr>
+                    </table>
+                </div>
+                <div>
+                    <div class="endpoint-method">
+                        <code>
+                            <div>GET</div>
+                            <div>
+                                <span class="green">application/
+                                    <div>xml</div>
+                                    <div>json</div>
+                                </span>
+                            </div>
+                        </code>
+                    </div>
+                    <div class="endpoint-url">
+                        <code><span class="yellow">[base_url]</span>/finance/batch</code>
+                    </div>
+                    <div class="endpoint-request toggle-language">
+                        <code data-language="curl">
+                            <div>$ curl "<span class="yellow">[base_url]</span>/finance/batch" \
+                                <div>-H <span class="green">"Accept: application/xml"</span> \</div>
+                                <div>-d <span class="red">complete=</span><span class="green">true</span> \</div>
+                                <div>-d <span class="red">from=</span><span class="green">"2018-06-10"</span></div>
+                            </div>
+                        </code>
+                    </div>
+                    <div class="endpoint-response">
+                        <code class="xml">
+                            <div>&lt;BatchList&gt;
+                                <div>&lt;Batch id="<span class="light-blue">10</span>"&gt;
+                                    <div>
+                                        &lt;Links
+                                            <div>data="<span class="light-blue">/finance/batch/10/payments</span>"</div>
+                                            <div>self="<span class="light-blue">/finance/batch/10</span>" /&gt;</div>
+                                    </div>
+                                    <div>&lt;Created&gt;<span class="light-blue">2018-06-12T13:14:03.407-04:00</span>&lt;/Created&gt;</div>
+                                    <div>&lt;Completed&gt;<span class="light-blue">2018-06-12</span>&lt;/Completed&gt;</div>
+                                    <div>&lt;Description&gt;<span class="light-blue">Month - 4</span>&lt;/Description&gt;</div>
+                                    <div>&lt;Amount&gt;<span class="light-blue">175.17</span>&lt;/Amount&gt;</div>
+                                </div>
+                                <div>&lt;/Batch&gt;</div>
+                                <div>&lt;Batch id="<span class="light-blue">11</span>"&gt;
+                                    <div>
+                                        &lt;Links
+                                            <div>data="<span class="light-blue">/finance/batch/11/payments</span>"</div>
+                                            <div>self="<span class="light-blue">/finance/batch/11</span>" /&gt;</div>
+                                    </div>
+                                    <div>&lt;Created&gt;<span class="light-blue">2018-06-12T14:53:11.233-04:00</span>&lt;/Created&gt;</div>
+                                    <div>&lt;Completed&gt;<span class="light-blue">2018-06-12</span>&lt;/Completed&gt;</div>
+                                    <div>&lt;Description&gt;<span class="light-blue">Month - 5</span>&lt;/Description&gt;</div>
+                                    <div>&lt;Amount&gt;<span class="light-blue">169.56</span>&lt;/Amount&gt;</div>
+                                </div>
+                                <div>&lt;/Batch&gt;</div>
+                            </div>
+                            <div>&lt;/BatchList&gt;</div>
+                        </code>
+                    </div>
+                </div>
+            </section>
+
+            <section id="endpoints-batch-update" data-label="Update">
+                    <div class="endpoint">
+                        <h1>Update Batch</h1>
+                        <p>
+                            Update tracking numbers by sending parameters in a <code>POST</code> request.
+                            This endpoint accepts data as <code>JSON</code> or <code>XML</code>. 
+                            <br />
+                            <br />
+                            Use <code>GET</code> to return current values in a <a href="#objects-finance-batchupdate">BatchUpdate Object</a> instead of the normal update behavior.</a>
+                        </p>
+                        <table class="attribute-table arguments">
+                            <tr>
+                                <td>id
+                                    <span>int</span>
+                                    <span class="red">required</span>
+                                </td>
+                                <td>The ID of the batch</td>
+                            </tr>
+                            <tr>
+                                <td>BatchUpdate
+                                    <span>object</span>
+                                </td>
+                                <td>Update information in <a href="#objects-finance-batchupdate">BatchUpdate Object</a> format</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div>
+                        <div class="endpoint-method">
+                            <code>
+                                <div>GET | POST</div>
+                                <div class="green">text/html</div>
+                                <div>
+                                    <span class="green">application/
+                                        <div>xml</div>
+                                        <div>json</div>
+                                    </span>
+                                </div>
+                            </code>
+                        </div>
+                        <div class="endpoint-url">
+                            <code><span class="yellow">[base_url]</span>/finance/batch/<span class="yellow">[id]</span>/update</code>
+                        </div>
+                        <div class="endpoint-request toggle-language">
+                            <code data-language="curl">
+                                <div>$ curl "<span class="yellow">[base_url]</span>/finance/batch/<span class="yellow">3</span>/update \
+                                    <div>-H <span class="green">"Content-type: application/xml"</span> \</div>
+                                    <div>-F <span class="red">file=</span><span class="green">@/path/to/xml.xml</span></div>
+                                </div>
+                                <br />
+                                <br />
+                                <div class="grey">// path/to/xml.xml file</div>
+
+                                <div>&lt;BatchUpdate&gt;
+                                    <div>&lt;Summary
+                                        id="<span class="light-blue">1</span>"
+                                        trackingNumber="<span class="light-blue">FOO</span>" 
+                                        /&gt;
+                                    </div>
+                                    <div>&lt;Summary
+                                        id="<span class="light-blue">2</span>"
+                                        trackingNumber="<span class="light-blue">BAR</span>" 
+                                        /&gt;
+                                    </div>
+                                    <div>&lt;Payment
+                                        id="<span class="light-blue">3</span>"
+                                        trackingNumber="<span class="light-blue">BAZ</span>" 
+                                        /&gt;
+                                    </div>
+                                    <div>&lt;Payment
+                                        id="<span class="light-blue">4</span>"
+                                        trackingNumber="<span class="light-blue">QUX</span>" 
+                                        /&gt;
+                                    </div>
+                                &lt;/Batchupdate&gt;
+                                </div>
+                            </code>
+                        </div>
+                        <div class="endpoint-response">
+                            <code class="xml">
+                                <div class="grey">// Status: 200</div>
+                            </code>
+                        </div>
+                    </div>
+                </section>
+
+                
+                <section id="endpoints-batch-complete" data-label="Complete">
+                    <div class="endpoint">
+                        <h1>Complete Batch</h1>
+                        <p>
+                            Complete a batch by sending parameters in a <code>POST</code> request.
+                            This endpoint accepts data as <code>JSON</code> or <code>XML</code>. 
+                            <br />
+                            <br />
+                            Use <code>GET</code> to return current values in a <a href="#objects-finance-batchcomplete">BatchComplete Object</a> instead of the normal update behavior.</a>
+                        </p>
+                        <table class="attribute-table arguments">
+                            <tr>
+                                <td>id
+                                    <span>int</span>
+                                    <span class="red">required</span>
+                                </td>
+                                <td>The ID of the batch</td>
+                            </tr>
+                            <tr>
+                                <td>BatchComplete
+                                    <span>object</span>
+                                </td>
+                                <td>Update information in <a href="#objects-finance-batchcomplete">BatchComplete Object</a> format</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div>
+                        <div class="endpoint-method">
+                            <code>
+                                <div>GET | POST</div>
+                                <div class="green">text/html</div>
+                                <div>
+                                    <span class="green">application/
+                                        <div>xml</div>
+                                        <div>json</div>
+                                    </span>
+                                </div>
+                            </code>
+                        </div>
+                        <div class="endpoint-url">
+                            <code><span class="yellow">[base_url]</span>/finance/batch/<span class="yellow">[id]</span>/complete</code>
+                        </div>
+                        <div class="endpoint-request toggle-language">
+                            <code data-language="curl">
+                                <div>$ curl "<span class="yellow">[base_url]</span>/finance/batch/<span class="yellow">3</span>/complete \
+                                    <div>-H <span class="green">"Content-type: application/json"</span> \</div>
+                                    <div>-F <span class="red">file=</span><span class="green">@/path/to/json.json</span></div>
+                                </div>
+                                <br />
+                                <br />
+                                <div class="grey">// path/to/json.json file</div>
+                                { 
+                                <div>
+                                    <div><span class="red">"PaymentDate":</span> <span class="green">"2018-06-15"</span>,</div>
+                                    <div><span class="red">"Email":</span> <span class="green">"SEND_NOW"</span>,</div>
+                                    <div>
+                                        <span class="red">"Payment":</span> [{
+                                        <div><span class="red">"id":</span> <span class="green">3</span>,</div>
+                                        <div><span class="red">"trackingNumber":</span> <span class="green">"ABC_123"</span></div>
+                                        },
+                                    </div>
+                                    <div>
+                                        {
+                                        <div><span class="red">"id":</span> <span class="green">4</span>,</div>
+                                        <div><span class="red">"trackingNumber":</span> <span class="green">"DEF_456"</span></div>
+                                    }],</div>
+                                    <div>
+                                        <span class="red">"Summary":</span> [{
+                                        <div><span class="red">"id":</span> <span class="green">1</span>,</div>
+                                        <div><span class="red">"trackingNumber":</span> <span class="green">"XYZ_890"</span></div>
+                                    </div>
+                                    <div>}]</div>
+                                }
+                                </div>
+                            </code>
+                        </div>
+                        <div class="endpoint-response">
+                            <code class="xml">
+                                <div class="grey">// Status: 200</div>
+                            </code>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="endpoints-batch-batch" data-label="Batch">
+                    <div class="endpoint">
+                        <h1>Get Batch</h1>
+                        <p>Returns a <a href="#objects-finance-batch">Batch Object</a> with the given ID.</p>
+                        <table class="attribute-table arguments">
+                            <tr>
+                                <td>id
+                                    <span>int</span>
+                                    <span class="red">required</span>
+                                </td>
+                                <td>The ID of the desired batch object</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div>
+                        <div class="endpoint-method">
+                            <code>
+                                <div>GET</div>
+                                <div>
+                                    <span class="green">application/
+                                        <div>xml</div>
+                                        <div>json</div>
+                                    </span>
+                                </div>
+                            </code>
+                        </div>
+                        <div class="endpoint-url">
+                            <code><span class="yellow">[base_url]</span>/finance/batch/<span class="yellow">[id]</span></code>
+                        </div>
+                        <div class="endpoint-request toggle-language">
+                            <code data-language="curl">
+                                <div>
+                                    $ curl "<span class="yellow">[base_url]</span>/finance/batch/<span class="yellow">10</span>" \
+                                    <div>-H <span class="green">"Accept: application/xml"</span></div>
+                                </div>
+                            </code>
+                        </div>
+                        <div class="endpoint-response">
+                            <code class="xml">
+                                    <div>&lt;Batch id="<span class="light-blue">10</span>"&gt;
+                                        <div>
+                                            &lt;Links
+                                                <div>data="<span class="light-blue">/finance/batch/10/payments</span>"</div>
+                                                <div>self="<span class="light-blue">/finance/batch/10</span>" /&gt;</div>
+                                        </div>
+                                        <div>&lt;Created&gt;<span class="light-blue">2018-06-12T13:14:03.407-04:00</span>&lt;/Created&gt;</div>
+                                        <div>&lt;Completed&gt;<span class="light-blue">2018-06-12</span>&lt;/Completed&gt;</div>
+                                        <div>&lt;Description&gt;<span class="light-blue">Month - 4</span>&lt;/Description&gt;</div>
+                                        <div>&lt;Amount&gt;<span class="light-blue">175.17</span>&lt;/Amount&gt;</div>
+                                    </div>
+                                    <div>&lt;/Batch&gt;</div>
+                            </code>
+                        </div>
+                    </div>
+                </section>
+    
+                <section id="endpoints-batch-payments" data-label="Payments">
+                    <div class="endpoint">
+                        <h1>Get Batch Payments</h1>
+                        <p>Returns a <a href="#objects-finance-batchpayments">BatchPayments Object</a> with the given ID.</p>
+                        <table class="attribute-table arguments">
+                            <tr>
+                                <td>id
+                                    <span>int</span>
+                                    <span class="red">required</span>
+                                </td>
+                                <td>The ID of the desired payment summary</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div>
+                        <div class="endpoint-method">
+                            <code>
+                                <div>GET</div>
+                                <div>
+                                    <span class="green">application/
+                                        <div>xml</div>
+                                        <div>json</div>
+                                    </span>
+                                </div>
+                            </code>
+                        </div>
+                        <div class="endpoint-url">
+                            <code><span class="yellow">[base_url]</span>/finance/batch/<span class="yellow">[id]</span>/payments</code>
+                        </div>
+                        <div class="endpoint-request toggle-language">
+                            <code data-language="curl">
+                                <div>
+                                    $ curl "<span class="yellow">[base_url]</span>/finance/batch/<span class="yellow">10</span>/payments" \
+                                    <div>-H <span class="green">"Accept: application/xml"</span></div>
+                                </div>
+                            </code>
+                        </div>
+                        <div class="endpoint-response">
+                            <code class="xml">
+                                    <div>&lt;BatchPayments&gt;
+                                        <div>
+                                            &lt;Summary id="<span class="light-blue">10</span>"&gt;
+                                                <div class="grey">// Summary Elements</div>
+                                            &lt;/Summary&gt;
+                                        </div>
+                                        <div>
+                                            &lt;Payment id="<span class="light-blue">28</span>"&gt;
+                                                <div class="grey">// Payment Elements</div>
+                                            &lt;/Payment&gt;
+                                        </div>
+                                        <div>
+                                            &lt;Payment id="<span class="light-blue">30</span>"&gt;
+                                                <div class="grey">// Payment Elements</div>
+                                            &lt;/Payment&gt;
+                                        </div>
+                                        <div>
+                                            &lt;Payment id="<span class="light-blue">29</span>"&gt;
+                                                <div class="grey">// Payment Elements</div>
+                                            &lt;/Payment&gt;
+                                        </div>
+                                    </div>
+                                    <div>&lt;/Batch&gt;</div>
+                            </code>
+                        </div>
+                    </div>
+                </section>
+        </section>
+
+        <!-- ====================================
+        // Finance - Payment Endpoints
+        ================================================= -->
+        <section id="endpoints-payment" class="endpoints" data-label="Endpoints - Payment">
+
+            <section id="endpoints-payment-payment" data-label="Payment">
+                <div class="endpoint">
+                    <h1>Get Payment</h1>
+                    <p>Returns a <a href="#objects-finance-payment-batch">Payment (Batch) Object</a>.</p>
+                    <table class="attribute-table arguments">
+                        <tr>
+                            <td>id
+                                <span>int</span>
+                                <span class="red">required</span>
+                            </td>
+                            <td>The ID of the desired payment</td>
+                        </tr>
+                    </table>
+                </div>
+                <div>
+                    <div class="endpoint-method">
+                        <code>
+                            <div>GET</div>
+                            <div>
+                                <span class="green">application/
+                                    <div>xml</div>
+                                    <div>json</div>
+                                </span>
+                            </div>
+                        </code>
+                    </div>
+                    <div class="endpoint-url">
+                        <code><span class="yellow">[base_url]</span>/finance/payment/<span class="yellow">[id]</span></code>
+                    </div>
+                    <div class="endpoint-request toggle-language">
+                        <code data-language="curl">
+                            <div>$ curl "<span class="yellow">[base_url]</span>/finance/payment/<span class="yellow">3</span>" \
+                                <div>-H <span class="green">"Accept: application/xml"</span></div>
+                            </div>
+                        </code>
+                    </div>
+                    <div class="endpoint-response">
+                        <code class="xml">
+                            <div>&lt;Payment id="<span class="light-blue">3</span>" summaryId="<span class="light-blue">1</span>"&gt;
+                                <div>
+                                    &lt;Links
+                                        <div>data="<span class="light-blue">/rs/finance/payment/3/data</span>"</div>
+                                        <div>self="<span class="light-blue">/rs/finance/payment/3</span>"</div>
+                                        <div>statement="<span class="light-blue">/rs/finance/payment/3/statement</span>" /&gt;</div> 
+                                </div>
+                                <div>
+                                    &lt;SalesRep id="<span class="light-blue">2</span>"&gt;
+                                    <div class="grey">// SalesRep Elements</div>
+                                    &lt;/SalesRep&gt;
+                                </div>
+                                <div>
+                                    &lt;Date&gt;<span class="light-blue">2018-05-31</span>&lt;/Date&gt;
+                                </div>
+                                <div>
+                                    &lt;TrackingNumber&gt;<span class="light-blue">0.3</span>&lt;/TrackingNumber&gt;
+                                </div>
+                                <div>
+                                    &lt;Amount&gt;<span class="light-blue">9.66</span>&lt;/Amount&gt;
+                                </div>
+                            &lt;/Payment&gt;</div>
+                        </code>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="endpoints-payment-data" data-label="Data">
+                <div class="endpoint">
+                    <h1>Get Payment Data</h1>
+                    <p>Returns a <a href="#objects-finance-statement">Statement Object</a>.</p>
+                    <table class="attribute-table arguments">
+                        <tr>
+                            <td>id
+                                <span>int</span>
+                                <span class="red">required</span>
+                            </td>
+                            <td>The ID of the desired payment</td>
+                        </tr>
+                    </table>
+                </div>
+                <div>
+                    <div class="endpoint-method">
+                        <code>
+                            <div>GET</div>
+                            <div>
+                                <span class="green">application/
+                                    <div>xml</div>
+                                </span>
+                            </div>
+                        </code>
+                    </div>
+                    <div class="endpoint-url">
+                        <code><span class="yellow">[base_url]</span>/finance/payment/<span class="yellow">[id]</span>/data</code>
+                    </div>
+                    <div class="endpoint-request">
+                        <code data-language="curl">
+                            <div>$ curl "<span class="yellow">[base_url]</span>/finance/payment/<span class="yellow">3</span>/data" \
+                                <div>-H <span class="green">"Accept: application/xml"</span></div>
+                            </div>
+                        </code>
+                    </div>
+                    <div class="endpoint-response">
+                        <code class="xml">
+                            <div>&lt;Statement&gt;
+                                <div>
+                                    &lt;SalesRep id="<span class="light-blue">2</span>"&gt;
+                                    <div class="grey">// SalesRep Elements</div>
+                                    &lt;/SalesRep&gt;
+                                </div>
+                                <div>
+                                    &lt;Payment id="<span class="light-blue">3</span>"&gt;
+                                    <div class="grey">// Payment Elements</div>
+                                    &lt;/Payment&gt;
+                                </div>
+                                <div>
+                                    &lt;Customer id="<span class="light-blue">1</span>"&gt;
+                                    <div class="grey">// Customer Elements</div>
+                                    &lt;/Customer&gt;
+                                </div>
+                            &lt;/Statement&gt;</div>
+                        </code>
+                    </div>
+                </div>
+            </section>
+
+            <section id="endpoints-payment-statement" data-label="Statement">
+                <div class="endpoint">
+                    <h1>Get Payment Statement</h1>
+                    <p>Returns a templated payment summary in <code>.pdf</code> or <code>.xlsx</code> format, based on your request headers, with the given ID.</p>
+                    <table class="attribute-table arguments">
+                        <tr>
+                            <td>id
+                                <span>int</span>
+                                <span class="red">required</span>
+                            </td>
+                            <td>The ID of the desired summary object</td>
+                        </tr>
+                    </table>
+                </div>
+                <div>
+                    <div class="endpoint-method">
+                        <code>
+                            <div>GET</div>
+                            <div>
+                                <span class="green">application/
+                                    <div>pdf</div>
+                                    <div>vnd.ms-excel</div>
+                                    <div>vnd.openxmlformats-officedocument.spreadsheetml.sheet</div>
+                                </span>
+                            </div>
+                        </code>
+                    </div>
+                    <div class="endpoint-url">
+                        <code><span class="yellow">[base_url]</span>/finance/payment/<span class="yellow">[id]</span>/statement</code>
+                    </div>
+                    <div class="endpoint-request toggle-language">
+                        <code data-language="curl">
+                            <div>$ curl "<span class="yellow">[base_url]</span>/finance/payment/<span class="yellow">3</span>/statement" \
+                                <div>-H <span class="green">"Accept: application/vnd.ms-excel"</span></div>
+                            </div>                            
+                        </code>
+                    </div>
+                    <div class="endpoint-response">
+                        <code class="xml">
+                            <div class="grey">// statement in xlsx format</div>
+                        </code>
+                    </div>
+                </div>
+            </section>
+        </section>
+        <section id="objects-finance" class="objects" data-label="Data Objects - Finance">
+            <!-- ====================================
+            // Objects - Finance - Summary (Payment)
+            ================================================= -->
+            <section id="objects-finance-summary-payment" data-label="Summary (Payment)">
+                <div class="object">
+                    <h1>Summary (Payment)</h1>
+                    <p>
+                        A payment summary in Sales Commission Manager.
+                        The object is very large and encompasses all important information about payments.
+                        Returned from the <a href="#endpoints-summary-data">Get Summary Data Endpoint</a>.
+                    </p>
+                    <table class="attribute-table">
+                        <tr>
+                            <td>showref
+                                <span>boolean</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                    </table>
+                    <table class="attribute-table elements">
+                        <tr>
+                            <td>Summary
+                                <span>object</span>
+                                <span class="red">optional</span>
+                                <span class="red">multiple</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Statement
+                                <span>object</span>
+                                <span class="red">optional</span>
+                                <span class="red">multiple</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-statement">Statement Object</a></td>
+                        </tr>
+                        <tr>
+                            <td>SalesRep<span>object</span></td>
+                            <td>Contains a <a href="#objects-finance-salesrep">SalesRep Object</a></td>
+                        </tr>
+                        <tr>
+                            <td>Payments<span>object</span></td>
+                            <td>Contains a <a href="#objects-finance-paymentsummary">PaymentSummary Object</a></td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+            <!-- ====================================
+            // Objects - Finance - Statement
+            ================================================= -->
+            <section id="objects-finance-statement" data-label="Statement">
+                <div class="object">
+                    <h1>Statement</h1>
+                    <p>Contains information about the SalesRep, Payment, Balance, and Customer(s) associated with a statement.
+                    Returned by the <a href="#endpoints-payment-data">Get Payment Data Endpoint</a>.
+                    </p>
+                    <table class="attribute-table">
+                        <tr>
+                            <td>showref<span>boolean</span></td>
+                            <td>&mdash;</td>
+                        </tr>
+                    </table>
+                    <table class="attribute-table elements">
+                        <tr>
+                            <td>SalesRep<span>object</span></td>
+                            <td>Contains a <a href="#objects-finance-salesrep">SalesRep Object</a></td>
+                        </tr>
+                        <tr>
+                            <td>Payment<span>object</span></td>
+                            <td>Contains a <a href="#objects-finance-payment">Payment Object</a></td>
+                        </tr>
+                        <tr>
+                            <td>Balance
+                                <span>object</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-statementbalance">StatementBalance Object</a></td>
+                        </tr>
+                        <tr>
+                            <td>Customer
+                                <span>object</span>
+                                <span class="red">optional</span>
+                                <span class="red">multiple</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-customer">Customer Object</a></td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+            <!-- ====================================
+            // Objects - Finance - SalesRep (Payment)
+            ================================================= -->
+            <section id="objects-finance-salesrep-payment" data-label="SalesRep (Payment)">
+                <div class="object">
+                    <h1>SalesRep (Payment)</h1>
+                    <p>Contains information about the sales representative.</p>
+                    <table class="attribute-table">
+                        <tr>
+                            <td>id<span>positive integer</span></td>
+                            <td>&mdash;</td>
+                        </tr>
+                    </table>
+                    <table class="attribute-table elements">
+                        <tr>
+                            <td>Name<span>string</span></td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Type
+                                <span>object</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-salesreptype">SalesRepType Object</a></td>
+                        </tr>
+                        <tr>
+                            <td>Ext
+                                <span>object</span>
+                                <span class="red">optional</span>
+                                <span class="red">multiple</span>
+                            </td>
+                            <td>Contains an <a href="#objects-finance-ext">Ext Object</a></td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+            <!-- ====================================
+            // Objects - Finance - PaymentSummary
+            ================================================= -->
+            <section id="objects-finance-paymentsummary" data-label="PaymentSummary">
+                <div class="object">
+                    <h1>PaymentSummary</h1>
+                    <p>Contains information about dates and balances of a payment.</p>
+                    <table class="attribute-table">
+                        <tr>
+                            <td>id<span>positive integer</span></td>
+                            <td>&mdash;</td>
+                        </tr>
+                    </table>
+                    <table class="attribute-table elements">
+                        <tr>
+                            <td>Date
+                                <span>object</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-minmaxdate">MinMaxDate Object</a></td>
+                        </tr>
+                        <tr>
+                            <td>TrackingNumber
+                                <span>string</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Total
+                                <span>decimal</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Balance
+                                <span>decimal</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+            <!-- ====================================
+            // Objects - Finance - Payment
+            ================================================= -->
+            <section id="objects-finance-payment-payment" data-label="Payment (Payment)">
+                <div class="object">
+                    <h1>Payment (Payment)</h1>
+                    <p>&mdash;</p>
+                    <table class="attribute-table">
+                        <tr>
+                            <td>id<span>positive integer</span></td>
+                            <td>&mdash;</td>
+                        </tr>
+                    </table>
+                    <table class="attribute-table elements">
+                        <tr>
+                            <td>Date
+                                <span>date</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>TrackingNumber
+                                <span>string</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Amount
+                                <span>decimal</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+            <!-- ====================================
+            // Objects - Finance - StatementBalance
+            ================================================= -->
+            <section id="objects-finance-statementbalance" data-label="StatementBalance">
+                <div class="object">
+                    <h1>StatementBalance</h1>
+                    <p>Contains information about a statement balance.</p>
+                    <table class="attribute-table">
+                        <tr>
+                            <td>start<span>decimal</span></td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>end<span>decimal</span></td>
+                            <td>&mdash;</td>
+                        </tr>
+                    </table>
+                    <table class="attribute-table elements">
+                        <tr>
+                            <td>Adjustment
+                                <span>object</span>
+                                <span class="red">optional</span>
+                                <span class="red">multiple</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-balanceadjustment">BalanceAdjustment Object</a></td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+            <!-- ====================================
+            // Objects - Finance - Customer
+            ================================================= -->
+            <section id="objects-finance-customer" data-label="Customer">
+                <div class="object">
+                    <h1>Customer</h1>
+                    <p>Contains information about a customer.</p>
+                    <table class="attribute-table">
+                        <tr>
+                            <td>id<span>positive integer</span></td>
+                            <td>&mdash;</td>
+                        </tr>
+                    </table>
+                    <table class="attribute-table elements">
+                        <tr>
+                            <td>Name
+                                <span>string</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>State
+                                <span>string</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Ext
+                                <span>object</span>
+                                <span class="red">optional</span>
+                                <span class="red">multiple</span>
+                            </td>
+                            <td>Contains an <a href="#objects-finance-ext">Ext Object</a></td>
+                        </tr>
+                        <tr>
+                            <td>Contract
+                                <span>object</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-contract">Contract Object</a></td>
+                        </tr>
+                        <tr>
+                            <td>Account
+                                <span>object</span>
+                                <span class="red">multiple</span>
+                            </td>
+                            <td>Contains an <a href="#objects-finance-account">Account Object</a></td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+            <!-- ====================================
+            // Objects - Finance - SalesRepType
+            ================================================= -->
+            <section id="objects-finance-salesreptype" data-label="SalesRepType">
+                <div class="object">
+                    <h1>SalesRepType</h1>
+                    <p>&mdash;</p>
+                    <table class="attribute-table">
+                        <tr>
+                            <td>ref<span>string</span></td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td class="dark-green">[node value]
+                                <span>string</span>
+                            </td>
+                            <td>The name of the SalesRepType.</td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+            <!-- ====================================
+            // Objects - Finance - Ext
+            ================================================= -->
+            <section id="objects-finance-ext" data-label="Ext">
+                <div class="object">
+                    <h1>Ext</h1>
+                    <p>An object carrying an extension value.</p>
+                    <table class="attribute-table">
+                        <tr>
+                            <td>name<span>string</span></td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>table
+                                <span>string</span>
+                                <span color="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td class="dark-green">[node value]
+                                <span>string</span>
+                            </td>
+                            <td>The value being carried by this extension.</td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+            <!-- ====================================
+            // Objects - Finance - MinMaxDate
+            ================================================= -->
+            <section id="objects-finance-minmaxdate" data-label="MinMaxDate">
+                <div class="object">
+                    <h1>MinMaxDate</h1>
+                    <p>An date with min and max attributes.</p>
+                    <table class="attribute-table">
+                        <tr>
+                            <td>min
+                                <span>date</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>max
+                                <span>date</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td class="dark-green">[node value]
+                                <span>date</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+            <!-- ====================================
+            // Objects - Finance - BalanceAdjustment
+            ================================================= -->
+            <section id="objects-finance-balanceadjustment" data-label="BalanceAdjustment">
+                <div class="object">
+                    <h1>BalanceAdjustment</h1>
+                    <p>Details about a balance adjustment on a statement.</p>
+                    <table class="attribute-table">
+                        <tr>
+                            <td>id
+                                <span>positive integer</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>date
+                                <span>date</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                    </table>
+                    <table class="attribute-table elements">
+                        <tr>
+                            <td>Type
+                                <span>object</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-balanceadjustmenttype">BalanceAdjustmentType Object</a></td>
+                        </tr>
+                        <tr>
+                            <td>Description
+                                <span>string</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Amount
+                                <span>decimal</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+            <!-- ====================================
+            // Objects - Finance - Contract
+            ================================================= -->
+            <section id="objects-finance-contract" data-label="Contract">
+                <div class="object">
+                    <h1>Contract</h1>
+                    <p>Details about a contract.</p>
+                    <table class="attribute-table">
+                        <tr>
+                            <td>id
+                                <span>positive integer</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>startDate
+                                <span>date</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>termLength
+                                <span>positive integer</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>rate
+                                <span>decimal</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                    </table>
+                    <table class="attribute-table elements">
+                        <tr>
+                            <td>Description
+                                <span>string</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Structure
+                                <span>object</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-structure">Structure Object</a></td>
+                        </tr>
+                        <tr>
+                            <td>Ext
+                                <span>object</span>
+                                <span class="red">optional</span>
+                                <span class="red">multiple</span>
+                            </td>
+                            <td>Contains an <a href="#objects-finance-ext">Ext Object</a></td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+            <!-- ====================================
+            // Objects - Finance - Account
+            ================================================= -->
+            <section id="objects-finance-account" data-label="Account">
+                <div class="object">
+                    <h1>Account</h1>
+                    <p>Details about an account.</p>
+                    <table class="attribute-table">
+                        <tr>
+                            <td>id
+                                <span>positive integer</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                    </table>
+                    <table class="attribute-table elements">
+                        <tr>
+                            <td>AccountNumber
+                                <span>string</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>SalesReference
+                                <span>string</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Description
+                                <span>string</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>State
+                                <span>string</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>StartDate
+                                <span>date</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Schedule
+                                <span>string</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Rate
+                                <span>string</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Ext
+                                <span>object</span>
+                                <span class="red">optional</span>
+                                <span class="red">multiple</span>
+                            </td>
+                            <td>Contains an <a href="#objects-finance-ext">Ext Object</a></td>
+                        </tr>
+                        <tr>
+                            <td>Commission
+                                <span>object</span>
+                                <span class="red">multiple</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-commission">Commission Object</a></td>
+                        </tr>
+                        <tr>
+                            <td>History
+                                <span>object</span>
+                                <span class="red">optional</span>
+                                <span class="red">multiple</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-commissionhistory">CommissionHistory Object</a></td>
+                        </tr>
+                        <tr>
+                            <td>Forecast
+                                <span>object</span>
+                                <span class="red">optional</span>
+                                <span class="red">multiple</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-commissionforecast">CommissionForecast Object</a></td>
+                        </tr>
+                        <tr>
+                            <td>Loan
+                                <span>object</span>
+                                <span class="red">optional</span>
+                                <span class="red">multiple</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-loanaccount">LoanAccount Object</a></td>
+                        </tr>
+                        <tr>
+                            <td>AggregationAccount
+                                <span>object</span>
+                                <span class="red">optional</span>
+                                <span class="red">multiple</span>
+                            </td>
+                            <td>Contains an <a href="#objects-finance-aggregationaccount">AggregationAccount Object</a></td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+            <!-- ====================================
+            // Objects - Finance - BalanceAdjustmentType
+            ================================================= -->
+            <section id="objects-finance-balanceadjustmenttype" data-label="BalanceAdjustmentType">
+                <div class="object">
+                    <h1>BalanceAdjustmentType</h1>
+                    <p>Details about the type of balance adjustment.</p>
+                    <table class="attribute-table">
+                        <tr>
+                            <td>id
+                                <span>positive integer</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>ref
+                                <span>string</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td class="dark-green">[node value]
+                                <span>string</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+            <!-- ====================================
+            // Objects - Finance - Structure
+            ================================================= -->
+            <section id="objects-finance-structure" data-label="Structure">
+                <div class="object">
+                    <h1>Structure</h1>
+                    <p>Details about a structure.</p>
+                    <table class="attribute-table">
+                        <tr>
+                            <td>id
+                                <span>positive integer</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                    </table>
+                    <table class="attribute-table elements">
+                        <tr>
+                            <td>Name
+                                <span>string</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+            <!-- ====================================
+            // Objects - Finance - Commission
+            ================================================= -->
+            <section id="objects-finance-commission" data-label="Commission">
+                <div class="object">
+                    <h1>Commission</h1>
+                    <p>Contains information about a commission.</p>
+                    <table class="attribute-table">
+                        <tr>
+                            <td>id
+                                <span>positive integer</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>fromPeriod
+                                <span>positive integer</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>toPeriod
+                                <span>positive integer</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>fromDate
+                                <span>date</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>toDate
+                                <span>date</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>historyId
+                                <span>positive integer</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>delta
+                                <span>boolean</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>userDefined
+                                <span>boolean</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                    </table>
+                    <table class="attribute-table elements">
+                        <tr>
+                            <td>Type
+                                <span>object</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-codevalue">CodeValue Object</a></td>
+                        </tr>
+                        <tr>
+                            <td>Description
+                                <span>string</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>State
+                                <span>string</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Tag
+                                <span>string</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Quantity
+                                <span>decimal</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Unit
+                                <span>object</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-unit">Unit Object</a></td>
+                        </tr>
+                        <tr>
+                            <td>ContractRate
+                                <span>decimal</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>SignUpBonus
+                                <span>decimal</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Amount
+                                <span>decimal</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Basis
+                                <span>object</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-codevalue">CodeValue Object</a></td>
+                        </tr>
+                        <tr>
+                            <td>BasisCount
+                                <span>integer</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Transaction
+                                <span>object</span>
+                                <span class="red">optional</span>
+                                <span class="red">multiple</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-transaction">Transaction Object</a></td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+            <!-- ====================================
+            // Objects - Finance - CommissionHistory
+            ================================================= -->
+            <section id="objects-finance-commissionhistory" data-label="CommissionHistory">
+                <div class="object">
+                    <h1>CommissionHistory</h1>
+                    <p>&mdash;</p>
+                    <table class="attribute-table">
+                        <tr>
+                            <td>id
+                                <span>positive integer</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                    </table>
+                    <table class="attribute-table elements">
+                        <tr>
+                            <td>Commission
+                                <span>object</span>
+                                <span class="red">multiple</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-commission">Commission Object</a></td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+            <!-- ====================================
+            // Objects - Finance - CommissionForecast
+            ================================================= -->
+            <section id="objects-finance-commissionforecast" data-label="CommissionForecast">
+                <div class="object">
+                    <h1>CommissionForecast</h1>
+                    <p>&mdash;</p>
+                    <table class="attribute-table">
+                        <tr>
+                            <td>id
+                                <span>positive integer</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>fromPeriod
+                                <span>positive integer</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>toPeriod
+                                <span>positive integer</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>paymentDate
+                                <span>date</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>fromDate
+                                <span>date</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>toDate
+                                <span>date</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                    </table>
+                    <table class="attribute-table elements">
+                        <tr>
+                            <td>Description
+                                <span>string</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Quantity
+                                <span>decimal</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Amount
+                                <span>decimal</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>MergedAmount
+                                <span>decimal</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Basis
+                                <span>object</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-codevalue">CodeValue Object</a></td>
+                        </tr>
+                        <tr>
+                            <td>Type
+                                <span>object</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-codevalue">CodeValue Object</a></td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+            <!-- ====================================
+            // Objects - Finance - LoanAccount
+            ================================================= -->
+            <section id="objects-finance-loanaccount" data-label="LoanAccount">
+                <div class="object">
+                    <h1>LoanAccount</h1>
+                    <p>&mdash;</p>
+                    <table class="attribute-table">
+                        <tr>
+                            <td>id
+                                <span>positive integer</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>firstPeriod
+                                <span>positive integer</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>lastPeriod
+                                <span>positive integer</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>startDate
+                                <span>date</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>endDate
+                                <span>date</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                    </table>
+                    <table class="attribute-table elements">
+                        <tr>
+                            <td>PrevBalance
+                                <span>decimal</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Balance
+                                <span>decimal</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Activity
+                                <span>object</span>
+                                <span class="red">multiple</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-loanactivity">LoanActivity Object</a></td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+            <!-- ====================================
+            // Objects - Finance - AggregationAccount
+            ================================================= -->
+            <section id="objects-finance-aggregationaccount" data-label="AggregationAccount">
+                <div class="object">
+                    <h1>AggregationAccount</h1>
+                    <p>&mdash;</p>
+                    <table class="attribute-table">
+                        <tr>
+                            <td>id
+                                <span>positive integer</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>startDate
+                                <span>date</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>endDate
+                                <span>date</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                    </table>
+                    <table class="attribute-table elements">
+                        <tr>
+                            <td>AccountNumber
+                                <span>string</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>AccountDescription
+                                <span>string</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>AccountStatus
+                                <span>string</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>State
+                                <span>string</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Ext
+                                <span>object</span>
+                                <span class="red">optional</span>
+                                <span class="red">multiple</span>
+                            </td>
+                            <td>Contains an <a href="#objects-finance-ext">Ext Object</a></td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+            <!-- ====================================
+            // Objects - Finance - CodeValue
+            ================================================= -->
+            <section id="objects-finance-codevalue" data-label="CodeValue">
+                <div class="object">
+                    <h1>CodeValue</h1>
+                    <p>&mdash;</p>
+                    <table class="attribute-table">
+                        <tr>
+                            <td>code
+                                <span>positive integer</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td class="dark-green">[node value]
+                                <span>string</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+            <!-- ====================================
+            // Objects - Finance - Unit
+            ================================================= -->
+            <section id="objects-finance-unit" data-label="Unit">
+                <div class="object">
+                    <h1>Unit</h1>
+                    <p>&mdash;</p>
+                    <table class="attribute-table">
+                        <tr>
+                            <td>rate
+                                <span>string</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>factor
+                                <span>positive integer</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td class="dark-green">[node value]
+                                <span>string</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+            <!-- ====================================
+            // Objects - Finance - Transaction
+            ================================================= -->
+            <section id="objects-finance-transaction" data-label="Transaction">
+                <div class="object">
+                    <h1>Transaction</h1>
+                    <p>&mdash;</p>
+                    <table class="attribute-table">
+                        <tr>
+                            <td>id
+                                <span>positive integer</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>period
+                                <span>integer</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>fromDate
+                                <span>date</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>toDate
+                                <span>date</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                    </table>
+                    <table class="attribute-table elements">
+                        <tr>
+                            <td>Description
+                                <span>string</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Quantity
+                                <span>decimal</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Factor
+                                <span>decimal</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Ratio
+                                <span>decimal</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Rate
+                                <span>decimal</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Fee
+                                <span>decimal</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Ext
+                                <span>object</span>
+                                <span class="red">optional</span>
+                                <span class="red">multiple</span>
+                            </td>
+                            <td>Contains an <a href="#objects-finance-ext">Ext Object</a></td>
+                        </tr>
+                        <tr>
+                            <td>AggregationBasis
+                                <span>object</span>
+                                <span class="red">optional</span>
+                                <span class="red">multiple</span>
+                            </td>
+                            <td>Contains an <a href="#objects-finance-aggregationbasis">AggregationBasis Object</a></td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+            <!-- ====================================
+            // Objects - Finance - LoanActivity
+            ================================================= -->
+            <section id="objects-finance-loanactivity" data-label="LoanActivity">
+                <div class="object">
+                    <h1>LoanActivity</h1>
+                    <p>&mdash;</p>
+                    <table class="attribute-table">
+                        <tr>
+                            <td>id
+                                <span>positive integer</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>fromPeriod
+                                <span>positive integer</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>toPeriod
+                                <span>positive integer</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>fromDate
+                                <span>date</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>toDate
+                                <span>date</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                    </table>
+                    <table class="attribute-table elements">
+                        <tr>
+                            <td>Type
+                                <span>object</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-codevalue">CodeValue Object</a></td>
+                        </tr>
+                        <tr>
+                            <td>Quantity
+                                <span>decimal</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Unit
+                                <span>string</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Amount
+                                <span>decimal</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Basis
+                                <span>object</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-codevalue">CodeValue Object</a></td>
+                        </tr>
+                        <tr>
+                            <td>PrevBalance
+                                <span>decimal</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Balance
+                                <span>decimal</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+            <!-- ====================================
+            // Objects - Finance - AggregationBasis
+            ================================================= -->
+            <section id="objects-finance-aggregationbasis" data-label="AggregationBasis">
+                <div class="object">
+                    <h1>AggregationBasis</h1>
+                    <p>&mdash;</p>
+                    <table class="attribute-table">
+                        <tr>
+                            <td>id
+                                <span>positive integer</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>period
+                                <span>integer</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>fromDate
+                                <span>date</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>toDate
+                                <span>date</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                    </table>
+                    <table class="attribute-table elements">
+                        <tr>
+                            <td>Description
+                                <span>string</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Quantity
+                                <span>decimal</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>AccountId
+                                <span>positive integer</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>AccountNumber
+                                <span>string</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>AccountDescription
+                                <span>string</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>State
+                                <span>string</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Ext
+                                <span>object</span>
+                                <span class="red">optional</span>
+                                <span class="red">multiple</span>
+                            </td>
+                            <td>Contains an <a href="#objects-finance-ext">Ext Object</a></td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+            <!-- ====================================
+            // Objects - Finance - BatchUpdate
+            ================================================= -->
+            <section id="objects-finance-batchupdate" data-label="BatchUpdate">
+                <div class="object">
+                    <h1>BatchUpdate</h1>
+                    <p>&mdash;</p>
+                    <table class="attribute-table elements">
+                        <tr>
+                            <td>Summary
+                                <span>object</span>
+                                <span class="red">optional</span>
+                                <span class="red">multiple</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-batchupdatevalue">BatchUpdateValue Object</a></td>
+                        </tr>
+                        <tr>
+                            <td>Payment
+                                <span>object</span>
+                                <span class="red">optional</span>
+                                <span class="red">multiple</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-batchupdatevalue">BatchUpdateValue Object</a></td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+            <!-- ====================================
+            // Objects - Finance - BatchUpdateValue
+            ================================================= -->
+            <section id="objects-finance-batchupdatevalue" data-label="BatchUpdateValue">
+                <div class="object">
+                    <h1>BatchUpdateValue</h1>
+                    <p>&mdash;</p>
+                    <table class="attribute-table">
+                        <tr>
+                            <td>id
+                                <span>int</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>trackingNumber
+                                <span>string</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+            <!-- ====================================
+            // Objects - Finance - BatchList
+            ================================================= -->
+            <section id="objects-finance-batchlist" data-label="BatchList">
+                <div class="object">
+                    <h1>BatchList</h1>
+                    <p>Contains a collection of <a href="#objects-finance-batch">Batch Objects</a>.</p>
+                    <table class="attribute-table elements">
+                        <tr>
+                            <td>Batch
+                                <span>object</span>
+                                <span class="red">optional</span>
+                                <span class="red">multiple</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-batch">Batch Object</a></td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+            
+            <!-- ====================================
+            // Objects - Finance - Batch
+            ================================================= -->
+            <section id="objects-finance-batch" data-label="Batch">
+                <div class="object">
+                    <h1>Batch</h1>
+                    <p>&mdash;</p>
+                    <table class="attribute-table">
+                        <tr>
+                            <td>id
+                                <span>int</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                    </table>
+                    <table class="attribute-table elements">
+                        <tr>
+                            <td>links
+                                <span>object</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-batchlinks">BatchLinks Object</a></td>
+                        </tr>
+                        <tr>
+                            <td>Created
+                                <span>dateTimeStamp</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Completed
+                                <span>date</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Description
+                                <span>string</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Amount
+                                <span>decimal</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Earned
+                                <span>decimal</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+            <!-- ====================================
+            // Objects - Finance - BatchLinks
+            ================================================= -->
+            <section id="objects-finance-batchlinks" data-label="BatchLinks">
+                <div class="object">
+                    <h1>BatchLinks</h1>
+                    <p>&mdash;</p>
+                    <table class="attribute-table">
+                        <tr>
+                            <td>payments
+                                <span>string</span>
+                            </td>
+                            <td>A URL pointing at payments for this batch.</td>
+                        </tr>
+                        <tr>
+                            <td>self
+                                <span>string</span>
+                            </td>
+                            <td>A URL pointing to this batch.</td>
+                        </tr>
+                        <tr>
+                            <td>update
+                                <span>string</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+
+
+
+            <!-- ====================================
+            // Objects - Finance - Payment (Batch)
+            ================================================= -->
+            <section id="objects-finance-payment-batch" data-label="Payment (Batch)">
+                <div class="object">
+                    <h1>Payment (Batch)</h1>
+                    <p>&mdash;</p>
+                    <table class="attribute-table">
+                        <tr>
+                            <td>id
+                                <span>int</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>summaryId
+                                <span>int</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                    </table>
+                    <table class="attribute-table elements">
+                        <tr>
+                            <td>links
+                                <span>object</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-paymentlinks">PaymentLinks Object</a></td>
+                        </tr>
+                        <tr>
+                            <td>SalesRep
+                                <span>object</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-salesrep-batch">SalesRep (Batch) Object</a></td>
+                        </tr>
+                        <tr>
+                            <td>Date
+                                <span>date</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>TrackingNumber
+                                <span>string</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Amount
+                                <span>decimal</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Earned
+                                <span>decimal</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>StartBalance
+                                <span>decimal</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>EndBalance
+                                <span>decimal</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+
+            <!-- ====================================
+            // Objects - Finance - PaymentLinks
+            ================================================= -->
+            <section id="objects-finance-paymentlinks" data-label="PaymentLinks">
+                <div class="object">
+                    <h1>PaymentLinks</h1>
+                    <p>&mdash;</p>
+                    <table class="attribute-table">
+                        <tr>
+                            <td>data
+                                <span>string</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>self
+                                <span>string</span>
+                            </td>
+                            <td>A URL pointing to this payment.</td>
+                        </tr>
+                        <tr>
+                            <td>statement
+                                <span>string</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+            
+            <!-- ====================================
+            // Objects - Finance - SalesRep (Batch)
+            ================================================= -->
+            <section id="objects-finance-salesrep-batch" data-label="SalesRep (Batch)">
+                <div class="object">
+                    <h1>SalesRep (Batch)</h1>
+                    <p>&mdash;</p>
+                    <table class="attribute-table">
+                        <tr>
+                            <td>id
+                                <span>int</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                    </table>
+                    <table class="attribute-table elements">
+                        <tr>
+                            <td>Name
+                                <span>string</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Ref
+                                <span>string</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Type
+                                <span>object</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-salesreptyperef">SalesRepTypeRef Object</a></td>
+                        </tr>
+                        <tr>
+                            <td>Ext
+                                <span>object</span>
+                                <span class="red">optional</span>
+                                <span class="red">multiple</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-namevalue">NameValue Object</a></td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+                
+            <!-- ====================================
+            // Objects - Finance - SalesRepTypeRef
+            ================================================= -->
+            <section id="objects-finance-salesreptyperef" data-label="SalesRepTypeRef">
+                <div class="object">
+                    <h1>SalesRepTypeRef</h1>
+                    <p>&mdash;</p>
+                    <table class="attribute-table">
+                        <tr>
+                            <td>id
+                                <span>short</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>ref
+                                <span>string</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>shortTitle
+                                <span>string</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>uri
+                                <span>string</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td class="dark-green">[node value]
+                                <span>string</span>
+                            </td>
+                            <td>The value being carried by this extension.</td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+                
+            <!-- ====================================
+            // Objects - Finance - NameValue
+            ================================================= -->
+            <section id="objects-finance-namevalue" data-label="NameValue">
+                <div class="object">
+                    <h1>NameValue</h1>
+                    <p>&mdash;</p>
+                    <table class="attribute-table">
+                        <tr>
+                            <td>name
+                                <span>string</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td class="dark-green">[node value]
+                                <span>string</span>
+                            </td>
+                            <td>The value being carried by this extension.</td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+
+            <!-- ====================================
+            // Objects - Finance - BatchPayments
+            ================================================= -->
+            <section id="objects-finance-batchpayments" data-label="BatchPayments">
+                <div class="object">
+                    <h1>BatchPayments</h1>
+                    <p>&mdash;</p>
+                    <table class="attribute-table elements">
+                        <tr>
+                            <td>Summary
+                                <span>object</span>
+                                <span class="red">optional</span>
+                                <span class="red">multiple</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-summary-batch">Summary (Batch) Object</a></td>
+                        </tr>
+                        <tr>
+                            <td>Payment
+                                <span>object</span>
+                                <span class="red">optional</span>
+                                <span class="red">multiple</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-payment-batch">Payment (Batch) Object</a></td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+
+            <!-- ====================================
+            // Objects - Finance - Summary (Batch)
+            ================================================= -->
+            <section id="objects-finance-summary-batch" data-label="Summary (Batch)">
+                <div class="object">
+                    <h1>Summary (Batch)</h1>
+                    <p>&mdash;</p>
+                    <table class="attribute-table">
+                        <tr>
+                            <td>id
+                                <span>int</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>summaryId
+                                <span>int</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                    </table>
+                    <table class="attribute-table elements">
+                        <tr>
+                            <td>links
+                                <span>object</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-summarylinks">SummaryLinks Object</a></td>
+                        </tr>
+                        <tr>
+                            <td>SalesRep
+                                <span>object</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-salesrep-batch">SalesRep (Batch) Object</a></td>
+                        </tr>
+                        <tr>
+                            <td>TrackingNumber
+                                <span>string</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Total
+                                <span>decimal</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Earned
+                                <span>decimal</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Summary
+                                <span>object</span>
+                                <span class="red">optional</span>
+                                <span class="red">multiple</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-summarychildid">SummaryChildId Object</a></td>
+                        </tr>
+                        <tr>
+                            <td>Payment
+                                <span>object</span>
+                                <span class="red">optional</span>
+                                <span class="red">multiple</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-summarychildid">SummaryChildId Object</a></td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+
+            <!-- ====================================
+            // Objects - Finance - SummaryLinks
+            ================================================= -->
+            <section id="objects-finance-summarylinks" data-label="SummaryLinks">
+                <div class="object">
+                    <h1>SummaryLinks</h1>
+                    <p>&mdash;</p>
+                    <table class="attribute-table">
+                        <tr>
+                            <td>data
+                                <span>string</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>statement
+                                <span>string</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+
+            <!-- ====================================
+            // Objects - Finance - SummaryChildId
+            ================================================= -->
+            <section id="objects-finance-summarychildid" data-label="SummaryChildId">
+                <div class="object">
+                    <h1>SummaryChildId</h1>
+                    <p>&mdash;</p>
+                    <table class="attribute-table">
+                        <tr>
+                            <td>id
+                                <span>int</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+
+            <!-- ====================================
+            // Objects - Finance - BatchComplete
+            ================================================= -->
+            <section id="objects-finance-batchcomplete" data-label="BatchComplete">
+                <div class="object">
+                    <h1>BatchComplete</h1>
+                    <p>&mdash;</p>
+                    <table class="attribute-table elements">
+                        <tr>
+                            <td>PaymentDate
+                                <span>date</span>
+                            </td>
+                            <td>&mdash;</td>
+                        </tr>
+                        <tr>
+                            <td>Email
+                                <span>object</span>
+                                <span class="red">optional</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-batchemailaction">BatchEmailAction Object</a></td>
+                        </tr>
+                        <tr>
+                            <td>Summary
+                                <span>object</span>
+                                <span class="red">optional</span>
+                                <span class="red">multiple</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-batchupdatevalue">BatchUpdateValue Object</a></td>
+                        </tr>
+                        <tr>
+                            <td>Payment
+                                <span>object</span>
+                                <span class="red">optional</span>
+                                <span class="red">multiple</span>
+                            </td>
+                            <td>Contains a <a href="#objects-finance-batchupdatevalue">BatchUpdateValue Object</a></td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+
+            <!-- ====================================
+            // Objects - Finance - BatchEmailAction
+            ================================================= -->
+            <section id="objects-finance-batchemailaction" data-label="BatchEmailAction">
+                <div class="object">
+                    <h1>BatchEmailAction</h1>
+                    <p>&mdash;</p>
+                    <table class="attribute-table">
+                        <tr>
+                            <td class="dark-green">[node value]
+                                <span>string</span>
+                            </td>
+                            <td><code>SEND_NOW</code>, <code>REQUEST</code>, or <code>NONE</code></td>
+                        </tr>
+                    </table>
+                </div>
+                <div></div>
+            </section>
+
+        </section>
+    </main>
+</body>
+</html>
+<script type="text/javascript">
+// -------------------------
+// DOM stuff we're gunna reuse
+// ------------------------------------------
+let API_ITEMS = [],
+    NAV_ITEMS = [];
+
+// -------------------------------------
+// Automatically pick up sections and their children, sort alphabetically, then build nav
+// -----------------------------------------------
+const wrapper = document.querySelector('#navigation > nav');
+document.querySelectorAll('#content > section').forEach(section => {
+    const sectionLabel = document.createElement('h2');
+    sectionLabel.textContent = section.getAttribute('data-label');
+    wrapper.appendChild(sectionLabel);
+
+    const sectionChildren = Array.prototype.slice.call(section.children);
+    sectionChildren.sort((a, b) => a.getAttribute('data-label') > b.getAttribute('data-label') ? 1 : -1);
+
+    sectionChildren.forEach(child => {
+        section.removeChild(child);
+        section.appendChild(child);
+        
+        const anchor = document.createElement('a');
+        anchor.href = '#' + child.id;
+        anchor.textContent = child.getAttribute('data-label');
+        wrapper.appendChild(anchor);
+
+        API_ITEMS.push(child);
+        NAV_ITEMS.push({ id: child.id, elem: anchor });
+    });
+});
+
+// -----------------------------
+// Shift navigation indicator based on where the user is looking
+// --------------------------------------------
+const indicatePagePosition = function() {
+    const atBottomOfPage = (window.innerHeight + window.scrollY) >= document.body.offsetHeight;
+    API_ITEMS.forEach((item, index) => {
+        NAV_ITEMS[index].elem.classList.toggle('selected', false);
+        if (atBottomOfPage)
+            return;
+        const bounds = item.getBoundingClientRect();
+        if (bounds.top <= 0 && (bounds.top + bounds.height) > 0)
+            NAV_ITEMS[index].elem.classList.toggle('selected', true);
+    });
+    
+    if (atBottomOfPage)
+        NAV_ITEMS[NAV_ITEMS.length - 1].elem.classList.toggle('selected', true);
+}
+window.addEventListener('scroll', indicatePagePosition);
+window.addEventListener('resize', indicatePagePosition);
+window.addEventListener('focus' , indicatePagePosition);
+
+// on load
+(indicatePagePosition)();
+
+// -------------------------------------
+// Scan for examples that use language toggling
+// -----------------------------------------------
+document.querySelectorAll('.toggle-language').forEach(wrapper => {
+    const languages = [];
+    for (let i = 0; i < wrapper.children.length; i++) {
+        const child = wrapper.children[i];
+        languages.push(child.getAttribute('data-language'));
+    }
+});
+</script>

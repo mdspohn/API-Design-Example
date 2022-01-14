@@ -1,0 +1,414 @@
+/* ---------------------
+// Imports
+---------------------------------*/
+
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700');
+
+/* ---------------------
+// CSS Reset
+---------------------------------*/
+
+html {
+    color: #000;
+    background: #FFF;
+}
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,
+pre,code,form,fieldset,legend,input,textarea,p,blockquote,th,td {
+    margin: 0;
+    padding: 0;
+}
+fieldset,img {
+    border: 0;
+}
+h1,h2,h3,h4,h5,h6 {
+    font-size: 100%;
+    font-weight: normal;
+}
+q:before,q:after{
+    content: '';
+}
+abbr,acronym{
+    border: 0;
+    font-variant: normal;
+}
+input,textarea,select{
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+}
+input,textarea,select{
+    *font-size: 100%;
+}
+legend{
+    color: #000;
+}
+*:focus {
+    outline: none;
+}
+
+/* ---------------------
+// General Styles
+---------------------------------*/
+
+html {
+    position: relative;
+    background-color: #f5f5f5;
+}
+body {
+    position: relative;
+    width: 100vw;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-weight: 400;
+    overflow-x: hidden;
+    overflow-y: auto;
+    color: #444;
+}
+
+a {
+    color: rgb(52,122,179) !important;
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 28px;
+    font-weight: lighter;
+    margin-bottom: 10px;
+    margin-top: 20px;
+    color: #444;
+}
+
+div > h1:first-child {
+    margin-top: 0px;
+}
+
+h3 {
+    font-size: 18px;
+    color: #ccc;
+}
+
+section h1+p {
+    color: #777;
+    margin: 10px 0 20px 0;
+}
+
+.green      { color: #c1ef65         !important; }
+.dark-green { color: #00a65a         !important; }
+.light-blue { color: #77bcd7         !important; }
+.blue       { color: rgb(52,122,179) !important; }
+.yellow     { color: #ebde68         !important; }
+.orange     { color: #ffae54         !important; }
+.red        { color: rgb(222,98,98)  !important; }
+.grey       { color: #777279         !important; }
+
+main#content > section > section > div:first-child code {
+    display: inline;
+    padding: 3px 5px;
+    margin: 0 2px;
+    background-color: rgba(255,255,255, 1);
+    color: rgb(222,98,98);
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-family: monospace;
+}
+
+main#content > section > section > div:nth-child(2) code {
+    display: block;
+    margin: 20px 0;
+    background-color: #272b2d;
+    color: #d0d0d0;
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 15px 20px 15px 15px;
+}
+
+main#content > section > section > div:nth-child(2) code div {
+    display: block;
+    line-height: 18px;
+}
+main#content > section > section > div:nth-child(2) code div div{
+    margin-left: 20px;
+}
+
+/* ------------------------
+// Navigation & Main Content Positioning
+----------------------------------------------*/
+
+aside#navigation {
+    display: block;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 10;
+    width: 250px;
+    height: calc(100% - 40px);
+    padding-bottom: 40px;
+    background-color: #fff;
+    overflow-x: hidden;
+    overflow-y: auto;
+    border-right: 1px solid rgba(0,0,0,0.3);
+}
+aside#navigation > #logo {
+    font-size: 28px;
+    padding-bottom: 15px;
+    margin: 10px 15px 0;
+    font-weight: lighter;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    text-align: center;
+}
+aside#navigation > #logo > span {
+    font-weight: normal;
+}
+aside#navigation > nav > h2 {
+    font-variant: small-caps;
+    text-transform: lowercase;
+    letter-spacing: 1px;
+    font-size: 20px;
+    color: #aaa;
+    padding: 10px 15px 5px;
+}
+aside#navigation > nav > a {
+    letter-spacing: 1px;
+    font-size: 16px;
+    padding: 6px 15px;
+    display: block;
+    font-weight: normal;
+    text-decoration: none;
+    color: #000 !important;
+    padding-left: 40px;
+    position: relative;
+}
+aside#navigation > nav > a:after {
+    content: '';
+    display: block;
+    height: 100%;
+    border-left: 1px solid rgba(0,0,0,0.3);
+    position: absolute;
+    left: 25px;
+    top: 0;
+}
+aside#navigation > nav > a.selected:after {
+    display: none;
+}
+aside#navigation > nav > a.selected {
+    background-color: rgb(52,122,179);
+    color: #fff !important;
+}
+main#content {
+    position: relative;
+    height: 100%;
+    width: calc(100% - 250px);
+    margin-left: 250px;
+}
+
+/* ---------------------
+// API Method Section Styles
+---------------------------------*/
+
+main#content > section > section {
+    overflow: hidden;
+}
+main#content > section.endpoints:nth-child(even),
+main#content > section.objects > section:nth-child(even) {
+    background-color: rgba(0,0,0,0.02);
+}
+main#content > section > section > div {
+    padding: 30px;
+    padding-bottom: calc(200% + 30px);
+    margin-bottom: -200%;
+    float: left;
+}
+main#content > section > section:after {
+    content: '';
+    display: block;
+    clear: both;
+}
+
+main#content > section:first-child > section:first-child > div {
+    border-top: 0;
+}
+
+main#content > section > section > div:first-child {
+    width: calc(50% - 60px);
+    border-top: 1px solid rgba(0,0,0,0.1);
+}
+main#content > section > section > div:nth-child(2) {
+    width: calc(50% - 75px);
+    background-color: #2d3134;
+    padding-right: 45px;
+    color: #fff;
+    border-top: 1px solid rgba(0,0,0,0.2);
+    position: relative;
+}
+
+main#content > section.endpoints > section > div:nth-child(2) {
+    padding-top: 10px;
+    padding-bottom: calc(200% + 10px);
+}
+
+
+/* ---------------------
+// Attribute Tables
+---------------------------------*/
+
+table.attribute-table {
+    position: relative;
+    margin-top: 50px;
+}
+
+table.attribute-table:before {
+    content: 'Attributes';
+    display: block;
+    position: absolute;
+    top: -30px;
+    min-width: 50%;
+    height: 20px;
+    font-variant: small-caps;
+    text-transform: lowercase;
+    letter-spacing: 1px;
+    font-size: 20px;
+    padding: 10px 0 8px;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+table.attribute-table.arguments:before {
+    content: 'Parameters';
+}
+table.attribute-table.elements:before {
+    content: 'Elements';
+}
+table.attribute-table tr {
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+table.attribute-table td {
+    padding: 15px 10px 20px;
+    color: #444;
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+table.attribute-table tr:last-child td {
+    border-bottom: 0;
+}
+table.attribute-table td:first-child {
+    font-weight: bold;
+    color: #667;
+    padding-left: 0;
+    min-width: 120px;
+}
+table.attribute-table td:first-child span {
+    display: block;
+    color: #aaa;
+    font-weight: normal;
+    text-transform: lowercase;
+    font-variant: small-caps;
+    letter-spacing: 1px;
+    font-size: 18px;
+    line-height: 18px;
+}
+table.attribute-table td:last-child {
+    padding-right: 0;
+}
+
+/* ---------------------
+// Example Column
+---------------------------------*/
+.objects section > div:nth-child(2) h1,
+.endpoints section > div > div:nth-child(2) h1 {
+    color: #fff;
+}
+.endpoint h1, .object h1 {
+    margin-top: 20px !important;
+    position: relative;
+}
+.endpoint:not(:first-child) h1, .object:not(:first-child) h1 {
+    margin-top: 60px !important;
+}
+.endpoint h1:before, .object h1:before {
+    content: 'Endpoint';
+    display: block;
+    position: absolute;
+    top: -25px;
+    left: 0;
+    font-size: 16px;
+    font-weight: normal;
+    border-bottom: 1px solid;
+}
+.object h1:before {
+    content: 'Object';
+}
+
+.endpoint-method,
+.endpoint-url,
+.endpoint-required-parameters,
+.endpoint-optional-parameters,
+.endpoint-request,
+.endpoint-response,
+.endpoint-success,
+.endpoint-error {
+    margin-top: 40px;
+    position: relative;
+}
+.endpoint-method:before,
+.endpoint-url:before,
+.endpoint-required-parameters:before,
+.endpoint-optional-parameters:before,
+.endpoint-request:before,
+.endpoint-response:before,
+.endpoint-success:before,
+.endpoint-error:before {
+    content: 'Methods';
+    display: block;
+    position: absolute;
+    top: -30px;
+    left: 0;
+    font-variant: small-caps;
+    text-transform: lowercase;
+    font-size: 20px;
+    color: #aaa;
+}
+.endpoint-url:before {
+    content: 'URL';
+}
+.endpoint-url.base:before {
+    content: 'Base_URL';
+}
+.endpoint-required-parameters:before  {
+    content: 'Required Parameters';
+}
+.endpoint-optional-parameters:before {
+    content: 'Optional Paramaters';
+}
+.endpoint-request:before {
+    content: 'Example Request';
+}
+.endpoint-response:before {
+    content: 'Example Response';
+}
+.endpoint-success:before {
+    content: 'Example Success';
+}
+.endpoint-error:before {
+    content: 'Example Error';
+}
+
+/* ---------------------
+// Media Queries
+---------------------------------*/
+
+@media (max-width: 1080px) {
+    main#content > section > section > div {
+        padding: 20px !important;
+        margin-bottom: 0;
+        float: none;
+        width: calc(100% - 60px) !important;
+        border-bottom: 0;
+    }
+}
+@media (max-width: 680px) {
+    aside#navigation {
+        display: none;
+    }
+    main#content {
+        margin-left: 0;
+        width: 100%;
+    }
+}
+
